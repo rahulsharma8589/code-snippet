@@ -55,15 +55,22 @@ const handleSubmit = async (e) => {
 
       const data = await response.json();
 
-      if (response.ok) {
-        // Store the token in localStorage
-        localStorage.setItem("token", data.token);
-        setLoginSuccess(true);
-        // a protected route after login
-      } else {
-        console.error("Login failed:", data.message);
-        // Handle login failure (e.g., show an error message)
-      }
+      // inside components/sign-in.jsx, inside the handleSubmit function
+
+if (response.ok) {
+  // Store the token in localStorage
+  localStorage.setItem("token", data.token);
+  setLoginSuccess(true);
+  
+  // Redirect to the dashboard after a short delay
+  setTimeout(() => {
+    navigate("/dashboard");
+  }, 1500); // 1.5-second delay to show the success message
+
+} else {
+  console.error("Login failed:", data.message);
+  // Handle login failure (e.g., show an error message)
+}
     } catch (error) {
       console.error("Network or server error:", error);
       // Handle network errors
