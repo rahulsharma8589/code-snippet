@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const protectedRoutes = require('./routes/protected'); // <-- IMPORT THE NEW ROUTE
+const snippetRoutes = require('./routes/snippets');
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+app.use('/api/snippets', snippetRoutes);
 app.use(cors());
 app.use(express.json());
 
