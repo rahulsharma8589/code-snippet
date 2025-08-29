@@ -34,20 +34,42 @@ export default function SignIn() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmit(true);
-    
-    if (canSubmit) {
-      // Form is valid - you can add your own logic here
-      console.log("Logged in user:", form.email);
-      
-      // Simulate login processing delay
-      setTimeout(() => {
+ // inside components/sign-in.jsx
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmit(true);
+
+  if (canSubmit) {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store the token in localStorage
+        localStorage.setItem("token", data.token);
         setLoginSuccess(true);
-      }, 500);
+        // a protected route after login
+      } else {
+        console.error("Login failed:", data.message);
+        // Handle login failure (e.g., show an error message)
+      }
+    } catch (error) {
+      console.error("Network or server error:", error);
+      // Handle network errors
     }
-  };
+  }
+};
 
   // Success Screen
   if (loginSuccess) {

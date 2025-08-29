@@ -3,7 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const authRoutes = require('./routes/auth'); // We will create this file next
+const authRoutes = require('./routes/auth');
+const protectedRoutes = require('./routes/protected'); // <-- IMPORT THE NEW ROUTE
 
 dotenv.config();
 
@@ -11,8 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors()); // Allow your frontend to communicate with your backend
-app.use(express.json()); // Allows parsing of JSON request bodies
+app.use(cors());
+app.use(express.json());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -20,7 +21,8 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 // API Routes
-app.use('/api/auth', authRoutes); // All authentication routes will start with /api/auth
+app.use('/api/auth', authRoutes);
+app.use('/api/protected', protectedRoutes); // <-- USE THE NEW ROUTE
 
 app.get('/', (req, res) => {
   res.send('API is running...');
