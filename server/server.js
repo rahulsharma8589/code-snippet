@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const protectedRoutes = require('./routes/protected'); // <-- IMPORT THE NEW ROUTE
+const protectedRoutes = require('./routes/protected');
 const snippetRoutes = require('./routes/snippets');
 
 dotenv.config();
@@ -12,8 +12,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use('/api/snippets', snippetRoutes);
+// Middleware - Placed before API routes to ensure they are applied to all incoming requests.
 app.use(cors());
 app.use(express.json());
 
@@ -24,7 +23,8 @@ mongoose.connect(process.env.MONGO_URI)
 
 // API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/protected', protectedRoutes); // <-- USE THE NEW ROUTE
+app.use('/api/protected', protectedRoutes);
+app.use('/api/snippets', snippetRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
